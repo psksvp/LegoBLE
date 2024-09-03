@@ -49,6 +49,7 @@ public class Hub: NSObject, ObservableObject
     switch message
     {
       case .action(.hubWillDisconnect), .action(.hubWillSwitchOff):
+        Log.info("\(message)")
         self.connected = false
       
       case .deviceAttached(port: let p, device: let d):
@@ -58,6 +59,12 @@ public class Hub: NSObject, ObservableObject
       case .deviceDetached(port: let p):
         self.devices.removeValue(forKey: p)
         Log.info("detatchIO at port: \(p)")
+        
+      case .portOutputFeedback(let feedbacks):
+        for f in feedbacks
+        {
+          self.devices[f.port]?.messageHandler?(.portOutputFeedback([f]))
+        }
         
       default:
         Log.info("\(message)")
@@ -123,7 +130,7 @@ extension Hub: CBPeripheralDelegate
     }
     else
     {
-      Log.info("Value Recieved: [\(bytes.count), \(bytes[0])] \(bytes.map({String(format: "%02X", $0)}))")
+      Log.info("No decoder for Value Recieved: [\(bytes.count), \(bytes[0])] \(bytes.map({String(format: "%02X", $0)}))")
     }
   }
   

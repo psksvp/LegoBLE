@@ -19,7 +19,8 @@ public extension Message
     
     guard let decode = Register.shared.decoder(forMessageType: header.messageType) else
     {
-      Log.error("There is no decoder registed from messageType: \(header.messageType)")
+      Log.warn("There is no decoder registed from messageType: \(header.messageType)")
+      Log.info("\(buffer)")
       return nil
     }
     

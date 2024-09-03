@@ -93,7 +93,7 @@ public enum IOEvent: UInt8
 
 public enum IOTypeID: UInt16
 {
-  // to hub
+  // down stream
   case motorTechnicLarge = 0x002E
   case motorTechnicXLarge = 0x002F
   case motorTechnicLargeAngular = 49   // Spike Prime
@@ -109,7 +109,7 @@ public enum IOTypeID: UInt16
   case lightRGB = 0x0017
   case lightColor = 0x0008
   
-  // from hub
+  // up stream
   case sensorTechnicMediumHubTemperature = 60
   case sensorTechnicMediumHubGesture = 54
   case sensorTechnicMediumHubAccelerometer = 57
@@ -134,8 +134,6 @@ public enum IOTypeID: UInt16
   case remoteControlButton = 55
   case remoteControlRSSI = 56
   
-  
-
   case unknown = 0
   
   static func lookup(_ n: UInt16) -> IOTypeID
@@ -188,7 +186,7 @@ public enum MotorType: UInt16
   case motorBasic = 0x0001
   case motorTrain = 0x0002
   case motorWithTachoExternal = 0x0026
-  case motorwithTachoInternal = 0x0027
+  case motorwithTachoInternal = 0x0027 //motorDualMoveHub
 }
 
 public enum SensorType: UInt16
@@ -218,6 +216,15 @@ public enum LightType: UInt16
 {
   case lightRGB = 0x0017
   case lightColor = 0x0008
+}
+
+public enum OutputFeedback: UInt8
+{
+  case commandInProgress = 0x01
+  case commandCompleted = 0x02
+  case commandDiscarded = 0x04
+  case busy = 0x10
+  case idle = 0x08
 }
 
 public enum Message

@@ -40,11 +40,11 @@ struct LegoBLEView: View
         }
         Button("run")
         {
-          self.hub?.devices[0]?.send(command: .runTachoMotorDegrees(power: 10, degree: 270, breaking: .break))
+          self.hub?.devices[0]?.send(command: .setAbsoluteMotorPosition(power: 10, degree: 270))
         }
         Button("stop")
         {
-          self.hub?.devices[0]?.send(command: .runTachoMotor(power: 0, breaking: .float))
+          self.hub?.devices[0]?.send(command: .stopMotor(breaking: .float))
         }
       }
       List(self.legoBLE.peripherals, id: \.identifier)
