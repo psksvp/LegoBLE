@@ -31,6 +31,12 @@ public extension Device
   
   func send(command: MotorCommand)
   {
+    guard "\(self.kind)".contains("motor") else
+    {
+      Log.error("trying to sent motor command on non motor device.")
+      return
+    }
+    
     let maxPower: UInt8 = 100
     switch command
     {
