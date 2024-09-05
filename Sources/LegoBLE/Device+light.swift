@@ -44,22 +44,4 @@ public extension Device
     // set the color
     self.sent(bytes: [0x81, self.port, 0x11, 0x51, 0x01, red, green, blue])
   }
-  
-  /*
-   byte port = getPortForDeviceType((byte)DeviceType::HUB_LED);
-   byte setColorMode[8] = {0x41, port, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00};
-   WriteValue(setColorMode, 8);
-   byte setColor[6] = {0x81, port, 0x11, 0x51, 0x00, color};
-   WriteValue(setColor, 6);
-   
-   void Lpf2Hub::setLedRGBColor(char red, char green, char blue)
-   {
-       byte port = getPortForDeviceType((byte)DeviceType::HUB_LED);
-       byte setRGBMode[8] = {0x41, port, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00};
-       WriteValue(setRGBMode, 8);
-       byte setRGBColor[8] = {0x81, port, 0x11, 0x51, 0x01, red, green, blue};
-       WriteValue(setRGBColor, 8);
-   }
-
-   */
 }
