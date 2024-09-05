@@ -65,7 +65,7 @@ public class Device
   
   public func received(message: Message)
   {
-    print("\(self.kind): \(message)")
+    //print("\(self.kind): \(message)")
     switch message
     {
       case .portSingleValue(port: _, values: let v):

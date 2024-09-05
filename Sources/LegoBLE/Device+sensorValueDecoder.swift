@@ -14,6 +14,7 @@ public extension Device
   {
     case voltage(Double)
     case current(Double)
+    case temperature(Int)
     case motorPosition(degree: Int)
     case xyz(x: Int, y: Int, z: Int, sensor: SensorType)
   }
@@ -30,6 +31,9 @@ public extension Device
         
       case .motor(_):
         return decodeTachoMotor(rawSensorData)
+        
+      case .sensor(.sensorTechnicMediumHubTemperature):
+        return decodeTemperature(rawSensorData)
         
       case .sensor(.sensorTechnicMediumHubTilt):
         return decodeXYZ(rawSensorData, sensor: .sensorTechnicMediumHubTilt)
@@ -83,6 +87,17 @@ public extension Device
     let raw = Double(UInt16(data[1], data[0]))
     
     return .current(raw * scale)
+  }
+  
+  func decodeTemperature(_ data: [UInt8]) -> SensorValue?
+  {
+    guard data.count >= 2 else
+    {
+      Log.error("buffer.count < 2")
+      return nil
+    }
+    
+    return .temperature(Int(UInt16(data[1], data[0])))
   }
   
   func decodeTachoMotor(_ data: [UInt8]) -> SensorValue?
