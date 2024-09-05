@@ -162,4 +162,18 @@ public extension Message
     return .portSingleValue(port: buffer[3], values: Array(buffer.dropFirst(4)))
   }
   
+  static func decodePortInputFormatSingle(_ buffer: [UInt8]) -> Message?
+  {
+    guard buffer.count >= 10 else
+    {
+      Log.error("buffer.count < 10")
+      return nil
+    }
+    
+    return .portInputFormatSingle(port: buffer[3],
+                                  mode: buffer[4],
+                                  deltaInterval: UInt32(Int32(buffer[8], buffer[7], buffer[6], buffer[5])),
+                                  notificationEnabled: buffer[9] > 0 ? true : false)
+  }
+  
 }

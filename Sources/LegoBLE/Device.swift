@@ -48,12 +48,7 @@ public class Device
   public let attachedHub: Hub
   public let port: UInt8
   public let kind: Kind
-  public var messageHandler: ((Message)->Void)? = 
-  {
-    message in 
-    
-    print("\(self.kind) \(message)")
-  }
+  public var sensorHandler: ((Device, SensorValue)->Void)? = nil
   
   public init(hub: Hub, port: UInt8, kind: Kind)
   {
@@ -66,6 +61,23 @@ public class Device
   public func sent(bytes: [UInt8])
   {
     self.attachedHub.sent(bytes: [UInt8(bytes.count + 2), 0] + bytes)
+  }
+  
+  public func received(message: Message)
+  {
+    print("\(self.kind): \(message)")
+    switch message
+    {
+      case .portSingleValue(port: _, values: let v):
+        if let sensorValue = self.decode(rawSensorData: v)
+        {
+          self.sensorHandler?(self, sensorValue)
+          print(sensorValue)
+        }
+        
+      default:
+        Log.warn("device: \(self) ignores message \(message)")
+    }
   }
   
   public func activateUpdate()

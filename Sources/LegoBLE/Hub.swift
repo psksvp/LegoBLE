@@ -63,11 +63,12 @@ public class Hub: NSObject, ObservableObject
       case .portOutputFeedback(let feedbacks):
         for f in feedbacks
         {
-          self.devices[f.port]?.messageHandler?(.portOutputFeedback([f]))
+          self.devices[f.port]?.received(message: .portOutputFeedback([f]))
         }
         
       case .portSingleValue(port: let p, values: _):
-        self.devices[p]?.messageHandler?(message)
+        self.devices[p]?.received(message: message)
+        
         
       default:
         Log.info("\(message)")

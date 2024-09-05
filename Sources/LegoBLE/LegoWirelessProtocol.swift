@@ -244,6 +244,7 @@ public enum Message
   case portOutputCommand(port: UInt8)
   
   case portSingleValue(port: UInt8,  values: [UInt8])
+  case portInputFormatSingle(port: UInt8, mode: UInt8, deltaInterval: UInt32, notificationEnabled: Bool)
   
   var type: MessageType
   {
@@ -280,6 +281,7 @@ extension Message
     Register.shared.registerDecoder(messageType: .portOutputCommandFeedback, decoder: Message.decodePortOutputFeedback)
     Register.shared.registerDecoder(messageType: .hubAlert, decoder: Message.decodeAlert)
     Register.shared.registerDecoder(messageType: .portValueSingle, decoder: decodePortValueSingle)
+    Register.shared.registerDecoder(messageType: .portInputFormatSingle, decoder: decodePortInputFormatSingle)
   }
   
   
