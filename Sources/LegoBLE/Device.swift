@@ -34,7 +34,7 @@ public class Device
         return .light(l)
       }
       
-      if n == IOTypeID.sound.rawValue
+      if n == DeviceID.sound.rawValue
       {
         return .sound
       }
@@ -48,7 +48,12 @@ public class Device
   public let attachedHub: Hub
   public let port: UInt8
   public let kind: Kind
-  public var messageHandler: ((Message)->Void)? = {message in print(message)}
+  public var messageHandler: ((Message)->Void)? = 
+  {
+    message in 
+    
+    print("\(self.kind) \(message)")
+  }
   
   public init(hub: Hub, port: UInt8, kind: Kind)
   {

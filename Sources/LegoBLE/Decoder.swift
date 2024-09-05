@@ -150,4 +150,16 @@ public extension Message
                     operation: operation,
                       payload: payload)
   }
+  
+  static func decodePortValueSingle(_ buffer: [UInt8]) -> Message?
+  {
+    guard buffer.count >= 5 else
+    {
+      Log.error("buffer.count < 5")
+      return nil
+    }
+    
+    return .portSingleValue(port: buffer[3], values: Array(buffer.dropFirst(4)))
+  }
+  
 }

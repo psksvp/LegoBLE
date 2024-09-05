@@ -66,6 +66,9 @@ public class Hub: NSObject, ObservableObject
           self.devices[f.port]?.messageHandler?(.portOutputFeedback([f]))
         }
         
+      case .portSingleValue(port: let p, values: _):
+        self.devices[p]?.messageHandler?(message)
+        
       default:
         Log.info("\(message)")
         return

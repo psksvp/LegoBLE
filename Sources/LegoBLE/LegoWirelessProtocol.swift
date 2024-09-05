@@ -91,7 +91,7 @@ public enum IOEvent: UInt8
 
 
 
-public enum IOTypeID: UInt16
+public enum DeviceID: UInt16
 {
   // down stream
   case motorTechnicLarge = 0x002E
@@ -136,9 +136,9 @@ public enum IOTypeID: UInt16
   
   case unknown = 0
   
-  static func lookup(_ n: UInt16) -> IOTypeID
+  static func lookup(_ n: UInt16) -> DeviceID
   {
-    guard let ioType = IOTypeID(rawValue: n) else
+    guard let ioType = DeviceID(rawValue: n) else
     {
       return .unknown
     }
@@ -243,6 +243,8 @@ public enum Message
   case portOutputFeedback([(port: UInt8, feedback: UInt8)])
   case portOutputCommand(port: UInt8)
   
+  case portSingleValue(port: UInt8,  values: [UInt8])
+  
   var type: MessageType
   {
     switch self
@@ -259,6 +261,8 @@ public enum Message
         return .genericErrorMessage
       case .portOutputFeedback(_):
         return .portOutputCommandFeedback
+      case .portSingleValue(port: _, values: _):
+        return .portValueSingle
       default:
         fatalError("Add missing code")
     }
@@ -275,6 +279,7 @@ extension Message
     Register.shared.registerDecoder(messageType: .genericErrorMessage, decoder: Message.decodeError)
     Register.shared.registerDecoder(messageType: .portOutputCommandFeedback, decoder: Message.decodePortOutputFeedback)
     Register.shared.registerDecoder(messageType: .hubAlert, decoder: Message.decodeAlert)
+    Register.shared.registerDecoder(messageType: .portValueSingle, decoder: decodePortValueSingle)
   }
   
   
