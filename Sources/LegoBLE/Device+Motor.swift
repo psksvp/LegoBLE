@@ -27,6 +27,8 @@ public extension Device
     case runTachoMotorDegrees(power: Int, degree: Int32)
     case setAbsoluteMotorPosition(power: Int, degree: Int32)
     case setAbsoluteMotorEncoderPosition(degree: Int32)
+    case setAccelerationProfile(timeMS: UInt16)
+    case setDecelerationProfile(timeMS: UInt16)
   }
   
   func send(command: MotorCommand)
@@ -64,6 +66,12 @@ public extension Device
         
       case let .setAbsoluteMotorEncoderPosition(degree: d):
         self.sent(bytes: [0x81, port, 0x11, 0x51, 0x02] + d.byteSwapped.bytes)
+        
+      case let .setAccelerationProfile(timeMS: t):
+        self.sent(bytes: [0x81, port, 0x10, 0x05] + t.byteSwapped.byteArray + [0x01])
+        
+      case let .setDecelerationProfile(timeMS: t):
+        self.sent(bytes: [0x81, port, 0x10, 0x06] + t.byteSwapped.byteArray + [0x02])
     }
   }
 }

@@ -16,7 +16,11 @@ public class Hub: NSObject, ObservableObject
   
   public var name: String {self.peripheral.name ?? ""}
   public var id: UUID {self.peripheral.identifier}
+  
+  @Published
   public private(set) var devices = [UInt8 : Device]()
+  
+  @Published
   public private(set) var connected = false
   
   public init(peripheral: CBPeripheral)

@@ -8,7 +8,7 @@
 import Foundation
 import CommonSwift
 
-public class Device
+public class Device: ObservableObject
 {
   public enum Kind
   {
@@ -50,6 +50,9 @@ public class Device
   public let kind: Kind
   public var sensorHandler: ((Device, SensorValue)->Void)? = nil
   
+  @Published
+  public private(set) var sensor: SensorValue? = nil
+  
   public init(hub: Hub, port: UInt8, kind: Kind)
   {
     self.attachedHub = hub
@@ -71,6 +74,7 @@ public class Device
       case .portSingleValue(port: _, values: let v):
         if let sensorValue = self.decode(rawSensorData: v)
         {
+          self.sensor = sensorValue
           self.sensorHandler?(self, sensorValue)
           print(sensorValue)
         }

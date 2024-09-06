@@ -40,7 +40,7 @@ struct LegoBLEView: View
         }
         Button("run")
         {
-          self.hub?.devices[0]?.send(command: .setAbsoluteMotorPosition(power: 10, degree: 270))
+          self.hub?.devices[0]?.send(command: .runTachoMotor(power: 30))
         }
         Button("stop")
         {
@@ -54,6 +54,11 @@ struct LegoBLEView: View
         {
           self.hub  = self.legoBLE.connect(hubID: p.identifier)
         }
+      }
+      
+      if let h = self.hub
+      {
+        HubView(hub: h)
       }
     }
   }
