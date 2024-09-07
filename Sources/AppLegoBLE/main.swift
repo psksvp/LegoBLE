@@ -23,6 +23,8 @@ struct LegoBLEView: View
 {
   @ObservedObject var legoBLE = LegoCentralBLE()
   @State var hub: Hub? = nil
+  @State var power: Int = 0
+  @State var degree: Int = 0
   
   var body: some View
   {
@@ -38,13 +40,17 @@ struct LegoBLEView: View
         {
           self.hub?.switchOff()
         }
+        TextField("power", value: self.$power, formatter: NumberFormatter())
         Button("run")
         {
-          self.hub?.devices[0]?.send(command: .runTachoMotor(power: 30))
+          self.hub?.devices[3]?.send(command: .runTachoMotorTime(power: self.power, timeMS: 1))
+          self.hub?.devices[3]?.send(command: .runTachoMotorTime(power: -self.power, timeMS: 1))
+          //self.hub?.devices[0]?.send(command: .setAbsoluteMotorPosition(power: self.power, degree: Int32(self.degree)))
         }
+        TextField("degree", value: self.$degree, formatter: NumberFormatter())
         Button("stop")
         {
-          self.hub?.devices[0]?.send(command: .stopMotor(breaking: .float))
+          self.hub?.devices[1]?.send(command: .stopMotor(breaking: .float))
         }
       }
       List(self.legoBLE.peripherals, id: \.identifier)
