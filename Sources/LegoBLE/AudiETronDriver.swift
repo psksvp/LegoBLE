@@ -26,12 +26,18 @@ public class Driver
 }
 
 //Audi RS Q e-tron 42160
-public class AudiETronDriver: Driver
+public class AudiETronDriver: Driver, ObservableObject
 {
   let hub: Hub
   let frontMotor: Device
   let rearMotor: Device
   let steeringMotor: Device
+  
+  @Published
+  public private(set) var speed = 0
+  
+  @Published
+  public private(set) var steeringAngle = 0
   
   public init?(hub: Hub)
   {
@@ -55,9 +61,16 @@ public class AudiETronDriver: Driver
     self.steeringMotor.sensorHandler = self.sensor
   }
   
-  public func sensor(_ device: Device, _ sensorVale: Device.SensorValue)
+  public func sensor(_ device: Device, _ sensorValue: Device.SensorValue)
   {
-    
+    switch sensorValue
+    {
+      case .motorPosition(degree: let d) where device.port == self.steeringMotor.port:
+        self.steeringAngle = d
+        
+      default:
+        return
+    }
   }
   
   public func steer(degree: Int)

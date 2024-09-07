@@ -43,11 +43,15 @@ struct LegoBLEView: View
         TextField("power", value: self.$power, formatter: NumberFormatter())
         Button("run")
         {
-          self.hub?.devices[3]?.send(command: .runTachoMotorTime(power: self.power, timeMS: 1))
-          self.hub?.devices[3]?.send(command: .runTachoMotorTime(power: -self.power, timeMS: 1))
+          self.hub?.devices[3]?.send(command: .runTachoMotorDegrees(power: self.power, degree: Int32(degree)))
+          //self.hub?.devices[3]?.send(command: .runTachoMotorTime(power: -self.power, timeMS: 1))
           //self.hub?.devices[0]?.send(command: .setAbsoluteMotorPosition(power: self.power, degree: Int32(self.degree)))
         }
         TextField("degree", value: self.$degree, formatter: NumberFormatter())
+        Button("zero")
+        {
+          self.hub?.devices[3]?.send(command: .setAbsoluteMotorPosition(power: 20, degree: Int32(0)))
+        }
         Button("stop")
         {
           self.hub?.devices[1]?.send(command: .stopMotor(breaking: .float))

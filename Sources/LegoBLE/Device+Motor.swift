@@ -36,11 +36,6 @@ public extension Device
     func scale(_ p: Int) -> UInt8
     {
       // copy from from Arduino
-      /**
-       long map(long x, long in_min, long in_max, long out_min, long out_max) {
-         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-       }
-       */
       func map(_ x: Int, _ inMin: Int, _ inMax: Int, _ outMin: Int, _ outMax: Int) -> Int
       {
         (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
@@ -72,26 +67,26 @@ public extension Device
     switch command
     {
       case let .stopMotor(breaking: b):
-        sent(bytes: [0x81, self.port, 0x11, 0x01, UInt8(scale(0)), maxPower, b.rawValue, 0x03])
+        sent(bytes: [0x81, self.port, 0x11, 0x01, scale(0), maxPower, b.rawValue, 0x03])
         
       case let .runBasicMotor(power: p):
-        sent(bytes: [0x81, self.port, 0x11, 0x51, 0x00, UInt8(scale(p))])
+        sent(bytes: [0x81, self.port, 0x11, 0x51, 0x00, scale(p)])
       
       case let .runTachoMotor(power: p):
-        sent(bytes: [0x81, self.port, 0x11, 0x01, UInt8(scale(p)), maxPower, Breaking.break.rawValue, 0x03])
+        sent(bytes: [0x81, self.port, 0x11, 0x01, scale(p), maxPower, Breaking.break.rawValue, 0x03])
         
       case let .runTachoMotorTime(power: p, timeMS: t):
         self.sent(bytes:  [0x81, port, 0x11, 0x09] +
                            UInt16(t).byteSwapped.byteArray +
-                          [UInt8(scale(p)), maxPower, Breaking.break.rawValue, 0x03])
+                          [scale(p), maxPower, Breaking.break.rawValue, 0x03])
         
       case let .runTachoMotorDegrees(power: p, degree: d):
         self.sent(bytes: [0x81, port, 0x11, 0x0B] +
                           d.byteSwapped.bytes +
-                         [UInt8(scale(p)), maxPower, Breaking.break.rawValue, 0x03])
+                         [scale(p), maxPower, Breaking.break.rawValue, 0x03])
         
       case let .setAbsoluteMotorPosition(power: p, degree: d):
-        self.sent(bytes: [0x81, port, 0x11, 0x0D] + d.byteSwapped.bytes + [UInt8(scale(p)), maxPower, Breaking.break.rawValue, 0x03])
+        self.sent(bytes: [0x81, port, 0x11, 0x0D] + d.byteSwapped.bytes + [scale(p), maxPower, Breaking.break.rawValue, 0x03])
         
       case let .setAbsoluteMotorEncoderPosition(degree: d):
         self.sent(bytes: [0x81, port, 0x11, 0x51, 0x02] + d.byteSwapped.bytes)
