@@ -76,7 +76,7 @@ public class Device: ObservableObject
         {
           self.sensor = sensorValue
           self.sensorHandler?(self, sensorValue)
-          print(sensorValue)
+          //print(sensorValue)
         }
         
       default:
@@ -94,7 +94,6 @@ public class Device: ObservableObject
         case .sensor(.sensorColor):           return 0x08
         case .sensor(.sensorMarioHubGesture): return 0x01
         default:                              return 0
-
       }
     }
     

@@ -57,6 +57,24 @@ struct LegoBLEView: View
           self.hub?.devices[1]?.send(command: .stopMotor(breaking: .float))
         }
       }
+      HStack
+      {
+        Button("c1")
+        {
+          self.hub?.sent(bytes: [0x0d, 0x00, 0x81, 0x03, 0x11, 0x51, 0x00, 0x03, 0x00, 0x00, 0x00, 0x10, 0x00])
+        }
+        Button("c2")
+        {
+          self.hub?.sent(bytes: [0x0d, 0x00, 0x81, 0x03, 0x11, 0x51, 0x00, 0x03, 0x00, 0x00, 0x00, 0x08, 0x00])
+        }
+        Button("c3")
+        {
+          let speed: UInt8 = 50
+          let steeringAngle: UInt8 = 0
+          let lights: UInt8 = 0
+          self.hub?.sent(bytes: [0x0d, 0x00, 0x81, 0x03, 0x11, 0x51, 0x00, 0x03, 0x00, speed, steeringAngle, lights, 0x00])
+        }
+      }
       List(self.legoBLE.peripherals, id: \.identifier)
       {
         p in
