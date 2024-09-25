@@ -25,6 +25,29 @@ public class Driver
   }
 }
 
+public class SteeringCalibrater
+{
+  let motor: Device
+  private var right: Int = 0
+  private var left: Int = 0
+  
+  
+  public init(steeringMotor: Device) 
+  {
+    self.motor = steeringMotor
+  }
+  
+  public func start()
+  {
+    self.motor.send(command: .runTachoMotor(power: 10))
+  }
+  
+  public func turn(degree: Int)
+  {
+    print("===> \(degree)")
+  }
+}
+
 //Audi RS Q e-tron 42160
 public class AudiETronDriver: Driver, ObservableObject
 {
@@ -38,6 +61,8 @@ public class AudiETronDriver: Driver, ObservableObject
   
   @Published
   public private(set) var steeringAngle = 0
+  
+  private var calibratingSteering = false
   
   public init?(hub: Hub)
   {
@@ -71,6 +96,13 @@ public class AudiETronDriver: Driver, ObservableObject
       default:
         return
     }
+  }
+  
+  
+  public func calibrateSteering()
+  {
+    self.calibratingSteering = true
+    self.steeringMotor.send(command: .runTachoMotor(power: 10))
   }
   
   public func steer(degree: Int)
